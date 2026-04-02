@@ -73,6 +73,8 @@ class BayesClassifier:
         #    <the rest of your code for updating frequencies here>
             text = self.load_file(os.path.join(self.training_data_directory, files[filename]))
             print(f"{index}: {filename}")
+            token = self.tokenize(text)
+            print(token)
           
 
 
