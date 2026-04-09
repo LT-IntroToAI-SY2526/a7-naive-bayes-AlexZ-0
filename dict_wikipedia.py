@@ -29,7 +29,7 @@ with open("sorted_stoplist.txt", "r", encoding="utf8") as f:
     stoplist = f.read()
 tokenize_stoplist = tokenize(stoplist)
 
-freqs = {}
+freqs = {} 
 
 for word in words:
     if word not in tokenize_stoplist:
