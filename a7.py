@@ -128,7 +128,7 @@ class BayesClassifier:
         # create some variables to store the positive and negative probability. since
         # we will be adding logs of probabilities, the initial values for the positive
         # and negative probabilities are set to 0
-        pos_socre = 0
+        pos_score = 0
         neg_score = 0
 
         # get the sum of all of the frequencies of the features in each document class
@@ -136,6 +136,7 @@ class BayesClassifier:
         # will be used in calculating the probability of each document class given each
         # individual feature
         pos_total = sum(self.pos_freqs.values())
+        neg_total = sum(self.neg_freqs.values())
         #add negative:
         # pos_total2 = sum(self.neg_freqs.values{})
 
@@ -144,8 +145,19 @@ class BayesClassifier:
         # running sums. when calculating the probabilities, always add 1 to the numerator
         # of each probability for add one smoothing (so that we never have a probability
         # of 0)
-        for token in token:
-            pos_token_freq = self.pos_freqs.get((token, 0) + 1)
+        for token in tokens:
+            pos_token_freq = self.pos_freqs.get(token, 0)
+            neg_token_freq = self.neg_freqs.get(token, 0)
+            pos_prob = (pos_token_freq + 1) / (pos_total + vocab_size)
+            neg_prob = (neg_token_freq + 1) / (neg_total + vocab_size)
+
+            pos_score += math.log(pos_prob)
+            neg_score += math.log(neg_prob)
+
+        if pos_score > neg_score:
+            return "positive"
+        else:
+            return "negative"
             #Do negative
         # for debugging purposes, it may help to print the overall positive and negative
         # probabilities
@@ -236,6 +248,11 @@ class BayesClassifier:
             words - list of tokens to update frequencies of
             freqs - dictionary of frequencies to update
         """
+        for w in words:
+            if w in freqs:
+                freqs[w] += 1
+            else:
+                freqs[w] = 1
         # TODO: your work here
         pass  # remove this line once you've implemented this method
 if __name__ == "__main__":
